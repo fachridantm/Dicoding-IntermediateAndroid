@@ -149,11 +149,11 @@ class SeatsView : View {
         val heightRowOne = (halfOfHeight - 600F)..(halfOfHeight - 400F)
         val heightRowTwo = (halfOfHeight - 300F)..(halfOfHeight - 100F)
         val heightRowTree = (halfOfHeight + 0F)..(halfOfHeight + 200F)
-        val heightRowFour =(halfOfHeight + 300F)..(halfOfHeight + 500F)
+        val heightRowFour = (halfOfHeight + 300F)..(halfOfHeight + 500F)
 
         when (event?.action) {
             ACTION_DOWN -> {
-                if (event.x in widthColumnOne && event.y in heightRowOne ){
+                if (event.x in widthColumnOne && event.y in heightRowOne) {
                     booking(0)
                 } else if (event.x in widthColumnTwo && event.y in heightRowOne) {
                     booking(1)
