@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Ticketing Apps</string>
+    <string name="choose_seat">Silakan Pilih Kursi</string>
+    <string name="finish">Selesai</string>
 </resources>
