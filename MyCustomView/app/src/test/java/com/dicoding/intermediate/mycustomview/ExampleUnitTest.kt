@@ -1,4 +1,4 @@
-package com.dicoding.fundamental.mycustomview
+package com.dicoding.intermediate.mycustomview
 
 import org.junit.Test
 
