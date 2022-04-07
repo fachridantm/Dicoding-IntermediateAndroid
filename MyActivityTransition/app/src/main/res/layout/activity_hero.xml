@@ -8,20 +8,22 @@
 
     <ImageView
         android:id="@+id/profileImageView"
+        android:transitionName="profile"
         android:layout_width="250dp"
         android:layout_height="250dp"
         android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@drawable/ahmad_dahlan" />
+        tools:srcCompat="@drawable/ahmad_dahlan"
+        android:contentDescription="@string/profile" />
 
     <TextView
         android:id="@+id/nameTextView"
+        android:transitionName="name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,6 +33,7 @@
 
     <TextView
         android:id="@+id/descTextView"
+        android:transitionName="description"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"

@@ -2,13 +2,14 @@
     <string name="app_name">My Application</string>
     <string name="heroes_name">Nama Pahlawan</string>
     <string name="description">Deskripsi</string>
+    <string name="profile">Profile</string>
 
     <string-array name="data_name">
         <item>Ahmad Dahlan</item>
         <item>Ahmad Yani</item>
         <item>Sutomo</item>
         <item>Gatot Soebroto</item>
-        <item>Ki Hadjar Dewantarai</item>
+        <item>Ki Hadjar Dewantara</item>
         <item>Mohammad Hatta</item>
         <item>Soedirman</item>
         <item>Soekarno</item>
