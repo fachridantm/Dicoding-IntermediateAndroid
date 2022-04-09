@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Product Detail</string>
+    <string name="description">Cool limited edition running shoes. Wearing these shoes will improve your understanding when learning to code.\n\nStuff is always there. Various sizes and colors are available. Order now!</string>
+    <string name="buy">Buy Now!</string>
+    <string name="size" translatable="false">42</string>
+    <string name="rating" translatable="false">4.5 (1,249)</string>
+    <string name="color">Brown</string>
+    <string name="date">Uploaded Aug 5, 2021</string>
+    <string name="store">Dicoding Store</string>
+    <string name="name">Running Shoes</string>
+    <string name="price">$ 13.95</string>
+    <string name="preview_desc" translatable="false">Preview</string>
+    <string name="color_desc">Color</string>
+    <string name="rating_desc">Rating</string>
+    <string name="size_desc">Size</string>
+    <string name="settings">Settings</string>
+</resources>
