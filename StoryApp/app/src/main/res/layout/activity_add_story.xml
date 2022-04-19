@@ -7,58 +7,90 @@
     tools:context=".ui.add.AddStoryActivity">
 
     <ImageView
-        android:id="@+id/imagePreview"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:id="@+id/iv_add_story"
+        android:layout_width="match_parent"
+        android:layout_height="260dp"
+        android:layout_marginHorizontal="24dp"
         android:layout_marginTop="24dp"
+        android:contentDescription="@string/add_story"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/ic_launcher_background" />
+        tools:srcCompat="@drawable/ic_launcher_background" />
 
     <Button
-        android:id="@+id/takepicture"
+        android:id="@+id/btn_take_picture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/btntocamera"
-        app:layout_constraintEnd_toEndOf="@+id/imagePreview"
-        app:layout_constraintStart_toStartOf="@+id/imagePreview"
-        app:layout_constraintTop_toBottomOf="@+id/imagePreview" />
-
-
-    <Button
-        android:id="@+id/upload"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="40dp"
-        android:text="@string/btntoupload"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine" />
-
-    <EditText
-        android:id="@+id/editTextTextMultiLine"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:gravity="start|top"
-        android:inputType="textMultiLine"
-        app:layout_constraintEnd_toEndOf="@+id/buttontofile"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="@+id/buttontofile"
-        app:layout_constraintTop_toBottomOf="@+id/buttontofile" />
+        android:layout_marginTop="12dp"
+        android:text="@string/take_picture"
+        app:layout_constraintEnd_toEndOf="@id/iv_add_story"
+        app:layout_constraintStart_toStartOf="@id/iv_add_story"
+        app:layout_constraintTop_toBottomOf="@id/iv_add_story" />
 
     <Button
-        android:id="@+id/buttontofile"
+        android:id="@+id/btn_open_file"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:text="@string/btntofile"
-        tools:text="file"
-        app:layout_constraintEnd_toEndOf="@+id/takepicture"
-        app:layout_constraintHorizontal_bias="0.492"
-        app:layout_constraintStart_toStartOf="@+id/takepicture"
-        app:layout_constraintTop_toBottomOf="@+id/takepicture" />
+        android:text="@string/open_file"
+        app:layout_constraintEnd_toEndOf="@id/btn_take_picture"
+        app:layout_constraintStart_toStartOf="@id/btn_take_picture"
+        app:layout_constraintTop_toBottomOf="@id/btn_take_picture" />
+
+    <TextView
+        android:id="@+id/tv_desc_story"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/desc"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_open_file" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tl_desc_story"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_desc_story">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edt_desc_story"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textMultiLine"
+            tools:ignore="SpeakableTextPresentCheck" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/btn_upload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:text="@string/upload_picture"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tl_desc_story" />
+
+    <ProgressBar
+        android:id="@+id/pb_add"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="@color/blue"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

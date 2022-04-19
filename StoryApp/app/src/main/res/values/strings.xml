@@ -23,4 +23,8 @@
     <string name="language">Change Language</string>
     <string name="logout">Logout</string>
     <string name="title_add_story">Add Story</string>
+    <string name="take_picture">Take Picture</string>
+    <string name="upload_picture">Upload Picture</string>
+    <string name="open_file">Open File</string>
+    <string name="input_image">Please input the image file first</string>
 </resources>
