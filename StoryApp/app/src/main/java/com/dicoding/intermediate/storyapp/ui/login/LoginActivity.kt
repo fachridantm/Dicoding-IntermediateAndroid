@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.dicoding.intermediate.storyapp.R
 import com.dicoding.intermediate.storyapp.databinding.ActivityLoginBinding
 import com.dicoding.intermediate.storyapp.model.SessionModel
+import com.dicoding.intermediate.storyapp.ui.home.HomeActivity
 import com.dicoding.intermediate.storyapp.ui.main.MainActivity
 import com.dicoding.intermediate.storyapp.utils.ViewModelFactory
 
@@ -32,8 +33,10 @@ class LoginActivity : AppCompatActivity() {
                     edtEmail.error = getString(R.string.required_field)
                     edtPassword.setError(getString(R.string.required_field), null)
                 } else if (edtEmail.length() != 0 && edtPassword.length() != 0) {
-                    loginViewModel.login()
+                    showLoading()
                     postText()
+                    showToast()
+                    loginViewModel.login()
                     moveActivity()
                 }
             }
@@ -42,8 +45,6 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setupViewModel() {
         factory = ViewModelFactory.getInstance(this)
-        showLoading()
-        showToast()
     }
 
     private fun setupView() {
@@ -77,6 +78,7 @@ class LoginActivity : AppCompatActivity() {
                 edtPassword.text.toString()
             )
         }
+
         loginViewModel.loginResponse.observe(this@LoginActivity) { response ->
             saveSession(
                 SessionModel(
@@ -91,7 +93,7 @@ class LoginActivity : AppCompatActivity() {
     private fun moveActivity() {
         loginViewModel.loginResponse.observe(this@LoginActivity) { response ->
             if (!response.error) {
-                startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
                 finish()
             }
         }

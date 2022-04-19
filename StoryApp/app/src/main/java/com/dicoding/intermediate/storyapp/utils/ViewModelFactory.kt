@@ -4,16 +4,16 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.dicoding.intermediate.storyapp.model.StoryRepository
+import com.dicoding.intermediate.storyapp.ui.home.HomeViewModel
 import com.dicoding.intermediate.storyapp.ui.login.LoginViewModel
-import com.dicoding.intermediate.storyapp.ui.main.MainViewModel
 import com.dicoding.intermediate.storyapp.ui.register.RegisterViewModel
 
 class ViewModelFactory(private val repo: StoryRepository) : ViewModelProvider.NewInstanceFactory() {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
-            modelClass.isAssignableFrom(MainViewModel::class.java) -> {
-                MainViewModel(repo) as T
+            modelClass.isAssignableFrom(HomeViewModel::class.java) -> {
+                HomeViewModel(repo) as T
             }
             modelClass.isAssignableFrom(RegisterViewModel::class.java) -> {
                 RegisterViewModel(repo) as T

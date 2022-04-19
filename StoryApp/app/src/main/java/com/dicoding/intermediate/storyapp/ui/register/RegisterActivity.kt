@@ -32,7 +32,9 @@ class RegisterActivity : AppCompatActivity() {
                     edtEmail.error = getString(R.string.required_field)
                     edtPassword.setError(getString(R.string.required_field), null)
                 } else if (edtName.length() != 0 && edtEmail.length() != 0 && edtPassword.length() != 0) {
+                    showLoading()
                     postText()
+                    showToast()
                     moveActivity()
                 }
             }
@@ -41,8 +43,6 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun setupViewModel() {
         factory = ViewModelFactory.getInstance(this)
-        showLoading()
-        showToast()
     }
 
     private fun setupView() {

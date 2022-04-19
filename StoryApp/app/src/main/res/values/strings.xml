@@ -15,4 +15,12 @@
     <string name="title_login">Login Form</string>
     <string name="message_login_page">Are your ready to share your story?</string>
     <string name="required_field">This field is required</string>
+    <string name="add_story">Add Story</string>
+    <string name="story">Story</string>
+    <string name="title">Title</string>
+    <string name="title_detail">Detail Story</string>
+    <string name="desc">Description</string>
+    <string name="language">Change Language</string>
+    <string name="logout">Logout</string>
+    <string name="title_add_story">Add Story</string>
 </resources>

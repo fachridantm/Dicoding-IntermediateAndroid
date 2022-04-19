@@ -3,9 +3,11 @@ package com.dicoding.intermediate.storyapp.model
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 import com.dicoding.intermediate.storyapp.service.api.ApiService
 import com.dicoding.intermediate.storyapp.service.response.LoginResponse
 import com.dicoding.intermediate.storyapp.service.response.RegisterResponse
+import com.dicoding.intermediate.storyapp.service.response.StoriesResponse
 import com.dicoding.intermediate.storyapp.utils.SessionPreferences
 import retrofit2.Call
 import retrofit2.Callback
@@ -20,6 +22,9 @@ class StoryRepository private constructor(
 
     private val _loginResponse = MutableLiveData<LoginResponse>()
     val loginResponse: LiveData<LoginResponse> = _loginResponse
+
+    private val _list = MutableLiveData<StoriesResponse>()
+    val list: LiveData<StoriesResponse> = _list
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -83,6 +88,38 @@ class StoryRepository private constructor(
                 Log.e(TAG, "onFailure: ${t.message.toString()}")
             }
         })
+    }
+
+    fun getListStories(token: String) {
+        _isLoading.value = true
+        val client = apiService.getListStories(token)
+
+        client.enqueue(object : Callback<StoriesResponse> {
+            override fun onResponse(
+                call: Call<StoriesResponse>,
+                response: Response<StoriesResponse>
+            ) {
+                _isLoading.value = false
+                if (response.isSuccessful && response.body() != null) {
+                    _list.value = response.body()
+                } else {
+                    _toastText.value = response.message().toString()
+                    Log.e(
+                        TAG,
+                        "onFailure: ${response.message()}, ${response.body()?.message.toString()}"
+                    )
+                }
+            }
+
+            override fun onFailure(call: Call<StoriesResponse>, t: Throwable) {
+                _toastText.value = t.message.toString()
+                Log.e(TAG, "onFailure: ${t.message.toString()}")
+            }
+        })
+    }
+
+    fun getSession(): LiveData<SessionModel> {
+        return pref.getSession().asLiveData()
     }
 
     suspend fun saveSession(session: SessionModel) {
