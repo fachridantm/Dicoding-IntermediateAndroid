@@ -13,6 +13,7 @@
         android:layout_marginHorizontal="24dp"
         android:layout_marginTop="24dp"
         android:contentDescription="@string/story"
+        android:transitionName="story"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -27,8 +28,9 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
+        android:transitionName="name"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_story_detail"
         tools:text="@string/name" />
 
@@ -38,8 +40,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@id/tv_name_detail"
+        android:transitionName="desc"
         app:layout_constraintEnd_toEndOf="@id/tv_name_detail"
+        app:layout_constraintStart_toStartOf="@id/tv_name_detail"
         app:layout_constraintTop_toBottomOf="@id/tv_name_detail"
         tools:text="@string/desc" />
 

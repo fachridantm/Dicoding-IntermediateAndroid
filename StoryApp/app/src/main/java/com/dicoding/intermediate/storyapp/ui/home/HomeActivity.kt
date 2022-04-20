@@ -78,10 +78,12 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun showToast() {
-        homeViewModel.toastText.observe(this@HomeActivity) { toastText ->
-            Toast.makeText(
-                this@HomeActivity, toastText, Toast.LENGTH_SHORT
-            ).show()
+        homeViewModel.toastText.observe(this@HomeActivity) {
+            it.getContentIfNotHandled()?.let { toastText ->
+                Toast.makeText(
+                    this@HomeActivity, toastText, Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 
@@ -92,6 +94,11 @@ class HomeActivity : AppCompatActivity() {
 
     private fun getListStories(token: String) {
         homeViewModel.getListStories(token)
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finishAffinity()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

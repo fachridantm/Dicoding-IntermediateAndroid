@@ -7,7 +7,7 @@
     tools:context=".ui.register.RegisterActivity">
 
     <ImageView
-        android:id="@+id/iv_welcome"
+        android:id="@+id/iv_register"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginHorizontal="32dp"
@@ -24,6 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="32dp"
         android:layout_marginTop="16dp"
+        android:alpha="0"
         android:text="@string/title_register_page"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -37,6 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
+        android:alpha="0"
         android:labelFor="@id/edt_name"
         android:text="@string/name"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,6 +50,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="32dp"
+        android:alpha="0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_name"
@@ -68,6 +71,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
+        android:alpha="0"
         android:labelFor="@id/edt_email"
         android:text="@string/email"
         app:layout_constraintStart_toStartOf="parent"
@@ -79,12 +83,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="32dp"
+        android:alpha="0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_email"
         app:startIconDrawable="@drawable/ic_email">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.dicoding.intermediate.storyapp.ui.custom.EmailEditText
             android:id="@+id/edt_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -98,6 +103,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
+        android:alpha="0"
         android:labelFor="@id/edt_password"
         android:text="@string/password"
         app:layout_constraintStart_toStartOf="parent"
@@ -109,6 +115,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="32dp"
+        android:alpha="0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_password"
@@ -129,6 +136,7 @@
         android:layout_height="64dp"
         android:layout_marginHorizontal="32dp"
         android:layout_marginTop="32dp"
+        android:alpha="0"
         android:text="@string/register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

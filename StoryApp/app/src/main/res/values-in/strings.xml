@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="password_length">Kolom ini tidak boleh kurang dari 6 karakter!</string>
+    <string name="title_register">Formulir Pendaftaran</string>
+    <string name="title_login">Formulir Masuk</string>
+    <string name="required_field">Bagian ini diperlukan!</string>
+    <string name="add_story">Tambahkan Cerita</string>
+    <string name="title_detail">Detail Cerita</string>
+    <string name="language">Ganti Bahasa</string>
+    <string name="logout">Keluar</string>
+    <string name="input_image">Silahkan masukan file gambar terlebih dahulu!</string>
+    <string name="email_validation">Masukkan alamat email yang valid!</string>
+    <string name="story">Cerita</string>
+    <string name="title">Judul</string>
+    <string name="name">Nama</string>
+    <string name="email">Email</string>
+    <string name="password">Kata Sandi</string>
+    <string name="register">Daftar</string>
+    <string name="login">Masuk</string>
+    <string name="title_welcome_page">Selamat datang di Dicoding Story!</string>
+    <string name="message_welcome_page">Bagikan cerita dan pengalaman belajar Anda di sini!</string>
+    <string name="title_register_page">Silahkan lengkapi data Anda di bawah ini!</string>
+    <string name="image_register">Daftar disini!</string>
+    <string name="desc">Deskripsi</string>
+    <string name="title_add_story">Tambah Cerita</string>
+    <string name="take_picture">Ambil Gambar</string>
+    <string name="upload_picture">Unggah Gambar</string>
+    <string name="open_file">Buka File</string>
+    <string name="message_login_page">Apakah Anda siap untuk berbagi cerita Anda?</string>
+</resources>

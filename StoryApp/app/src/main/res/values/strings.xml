@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Dicoding Story</string>
+    <string name="app_name" translatable="false">Dicoding Story</string>
     <string name="name">Name</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -7,14 +7,13 @@
     <string name="login">Login</string>
     <string name="title_welcome_page">Welcome to Dicoding Story!</string>
     <string name="message_welcome_page">Share your stories and learning experiences here!</string>
-    <string name="image_welcome">Welcome to Dicoding Story!</string>
     <string name="title_register_page">Please, complete your data on down below!</string>
     <string name="image_register">Register here!</string>
     <string name="password_length">This field can\'t be less than 6 character</string>
     <string name="title_register">Registration Form</string>
     <string name="title_login">Login Form</string>
     <string name="message_login_page">Are your ready to share your story?</string>
-    <string name="required_field">This field is required</string>
+    <string name="required_field">This field is required!</string>
     <string name="add_story">Add Story</string>
     <string name="story">Story</string>
     <string name="title">Title</string>
@@ -26,5 +25,6 @@
     <string name="take_picture">Take Picture</string>
     <string name="upload_picture">Upload Picture</string>
     <string name="open_file">Open File</string>
-    <string name="input_image">Please input the image file first</string>
+    <string name="input_image">Please input the image file first!</string>
+    <string name="email_validation">Enter a valid email address!</string>
 </resources>

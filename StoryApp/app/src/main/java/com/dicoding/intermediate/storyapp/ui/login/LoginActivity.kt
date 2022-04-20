@@ -1,5 +1,7 @@
 package com.dicoding.intermediate.storyapp.ui.login
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -22,7 +24,29 @@ class LoginActivity : AppCompatActivity() {
 
         setupView()
         setupViewModel()
+        playAnimation()
         setupAction()
+    }
+
+    private fun playAnimation() {
+        ObjectAnimator.ofFloat(binding.ivLogin, View.TRANSLATION_X, -30f, 30f).apply {
+            duration = 6000
+            repeatCount = ObjectAnimator.INFINITE
+            repeatMode = ObjectAnimator.REVERSE
+        }.start()
+
+        val title = ObjectAnimator.ofFloat(binding.tvTitle, View.ALPHA, 1f).setDuration(500)
+        val message = ObjectAnimator.ofFloat(binding.tvMessage, View.ALPHA, 1f).setDuration(500)
+        val email = ObjectAnimator.ofFloat(binding.tvEmail, View.ALPHA, 1f).setDuration(500)
+        val emailEdit = ObjectAnimator.ofFloat(binding.tlEmail, View.ALPHA, 1f).setDuration(500)
+        val password = ObjectAnimator.ofFloat(binding.tvPassword, View.ALPHA, 1f).setDuration(500)
+        val passwordEdit = ObjectAnimator.ofFloat(binding.tlPassword, View.ALPHA, 1f).setDuration(500)
+        val login = ObjectAnimator.ofFloat(binding.btnLogin, View.ALPHA, 1f).setDuration(500)
+
+        AnimatorSet().apply {
+            playSequentially(title, message, email, emailEdit, password, passwordEdit, login)
+            startDelay = 500
+        }.start()
     }
 
     private fun setupAction() {
@@ -57,10 +81,12 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun showToast() {
-        loginViewModel.toastText.observe(this@LoginActivity) { toastText ->
-            Toast.makeText(
-                this@LoginActivity, toastText, Toast.LENGTH_SHORT
-            ).show()
+        loginViewModel.toastText.observe(this@LoginActivity) {
+            it.getContentIfNotHandled()?.let { toastText ->
+                Toast.makeText(
+                    this@LoginActivity, toastText, Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 

@@ -180,10 +180,12 @@ class AddStoryActivity : AppCompatActivity() {
     }
 
     private fun showToast() {
-        addStoryViewModel.toastText.observe(this@AddStoryActivity) { toastText ->
-            Toast.makeText(
-                this@AddStoryActivity, toastText, Toast.LENGTH_SHORT
-            ).show()
+        addStoryViewModel.toastText.observe(this@AddStoryActivity) {
+            it.getContentIfNotHandled()?.let { toastText ->
+                Toast.makeText(
+                    this@AddStoryActivity, toastText, Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 

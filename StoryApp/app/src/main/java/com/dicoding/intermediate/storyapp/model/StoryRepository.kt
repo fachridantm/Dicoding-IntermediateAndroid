@@ -9,6 +9,7 @@ import com.dicoding.intermediate.storyapp.service.response.AddStoryResponse
 import com.dicoding.intermediate.storyapp.service.response.LoginResponse
 import com.dicoding.intermediate.storyapp.service.response.RegisterResponse
 import com.dicoding.intermediate.storyapp.service.response.StoriesResponse
+import com.dicoding.intermediate.storyapp.utils.Event
 import com.dicoding.intermediate.storyapp.utils.SessionPreferences
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -35,8 +36,8 @@ class StoryRepository private constructor(
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private val _toastText = MutableLiveData<String>()
-    val toastText: LiveData<String> = _toastText
+    private val _toastText = MutableLiveData<Event<String>>()
+    val toastText: LiveData<Event<String>> = _toastText
 
     fun postRegister(name: String, email: String, password: String) {
         _isLoading.value = true
@@ -50,9 +51,9 @@ class StoryRepository private constructor(
                 _isLoading.value = false
                 if (response.isSuccessful && response.body() != null) {
                     _registerResponse.value = response.body()
-                    _toastText.value = response.body()?.message
+                    _toastText.value = Event(response.body()?.message.toString())
                 } else {
-                    _toastText.value = response.message().toString()
+                    _toastText.value = Event(response.message().toString())
                     Log.e(
                         TAG,
                         "onFailure: ${response.message()}, ${response.body()?.message.toString()}"
@@ -61,7 +62,7 @@ class StoryRepository private constructor(
             }
 
             override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                _toastText.value = t.message.toString()
+                _toastText.value = Event(t.message.toString())
                 Log.e(TAG, "onFailure: ${t.message.toString()}")
             }
         })
@@ -79,9 +80,9 @@ class StoryRepository private constructor(
                 _isLoading.value = false
                 if (response.isSuccessful && response.body() != null) {
                     _loginResponse.value = response.body()
-                    _toastText.value = response.body()?.message
+                    _toastText.value = Event(response.body()?.message.toString())
                 } else {
-                    _toastText.value = response.message().toString()
+                    _toastText.value = Event(response.message().toString())
                     Log.e(
                         TAG,
                         "onFailure: ${response.message()}, ${response.body()?.message.toString()}"
@@ -90,7 +91,7 @@ class StoryRepository private constructor(
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                _toastText.value = t.message.toString()
+                _toastText.value = Event(t.message.toString())
                 Log.e(TAG, "onFailure: ${t.message.toString()}")
             }
         })
@@ -109,7 +110,7 @@ class StoryRepository private constructor(
                 if (response.isSuccessful && response.body() != null) {
                     _list.value = response.body()
                 } else {
-                    _toastText.value = response.message().toString()
+                    _toastText.value = Event(response.message().toString())
                     Log.e(
                         TAG,
                         "onFailure: ${response.message()}, ${response.body()?.message.toString()}"
@@ -118,7 +119,7 @@ class StoryRepository private constructor(
             }
 
             override fun onFailure(call: Call<StoriesResponse>, t: Throwable) {
-                _toastText.value = t.message.toString()
+                _toastText.value = Event(t.message.toString())
                 Log.e(TAG, "onFailure: ${t.message.toString()}")
             }
         })
@@ -136,9 +137,9 @@ class StoryRepository private constructor(
                 _isLoading.value = false
                 if (response.isSuccessful && response.body() != null) {
                     _uploadResponse.value = response.body()
-                    _toastText.value = response.body()?.message
+                    _toastText.value = Event(response.body()?.message.toString())
                 } else {
-                    _toastText.value = response.message().toString()
+                    _toastText.value = Event(response.message().toString())
                     Log.e(
                         TAG,
                         "onFailure: ${response.message()}, ${response.body()?.message.toString()}"

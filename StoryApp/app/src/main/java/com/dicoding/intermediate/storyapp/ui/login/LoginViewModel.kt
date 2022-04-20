@@ -6,12 +6,13 @@ import androidx.lifecycle.viewModelScope
 import com.dicoding.intermediate.storyapp.model.SessionModel
 import com.dicoding.intermediate.storyapp.model.StoryRepository
 import com.dicoding.intermediate.storyapp.service.response.LoginResponse
+import com.dicoding.intermediate.storyapp.utils.Event
 import kotlinx.coroutines.launch
 
 class LoginViewModel(private val repo: StoryRepository) : ViewModel() {
     val loginResponse: LiveData<LoginResponse> = repo.loginResponse
     val isLoading: LiveData<Boolean> = repo.isLoading
-    val toastText: LiveData<String> = repo.toastText
+    val toastText: LiveData<Event<String>> = repo.toastText
 
     fun postLogin(email: String, password: String) {
         viewModelScope.launch {

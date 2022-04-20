@@ -1,5 +1,7 @@
 package com.dicoding.intermediate.storyapp.ui.register
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -21,7 +23,30 @@ class RegisterActivity : AppCompatActivity() {
 
         setupView()
         setupViewModel()
+        playAnimation()
         setupAction()
+    }
+
+    private fun playAnimation() {
+        ObjectAnimator.ofFloat(binding.ivRegister, View.TRANSLATION_X, -30f, 30f).apply {
+            duration = 6000
+            repeatCount = ObjectAnimator.INFINITE
+            repeatMode = ObjectAnimator.REVERSE
+        }.start()
+
+        val title = ObjectAnimator.ofFloat(binding.tvTitle, View.ALPHA, 1f).setDuration(500)
+        val name = ObjectAnimator.ofFloat(binding.tvName, View.ALPHA, 1f).setDuration(500)
+        val nameEdit = ObjectAnimator.ofFloat(binding.tlName, View.ALPHA, 1f).setDuration(500)
+        val email = ObjectAnimator.ofFloat(binding.tvEmail, View.ALPHA, 1f).setDuration(500)
+        val emailEdit = ObjectAnimator.ofFloat(binding.tlEmail, View.ALPHA, 1f).setDuration(500)
+        val password = ObjectAnimator.ofFloat(binding.tvPassword, View.ALPHA, 1f).setDuration(500)
+        val passwordEdit = ObjectAnimator.ofFloat(binding.tlPassword, View.ALPHA, 1f).setDuration(500)
+        val register = ObjectAnimator.ofFloat(binding.btnRegister, View.ALPHA, 1f).setDuration(500)
+
+        AnimatorSet().apply {
+            playSequentially(title, name, nameEdit, email, emailEdit, password, passwordEdit, register)
+            startDelay = 500
+        }.start()
     }
 
     private fun setupAction() {
@@ -62,10 +87,12 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun showToast() {
-        registerViewModel.toastText.observe(this@RegisterActivity) { toastText ->
-            Toast.makeText(
-                this@RegisterActivity, toastText, Toast.LENGTH_SHORT
-            ).show()
+        registerViewModel.toastText.observe(this@RegisterActivity) {
+            it.getContentIfNotHandled()?.let { toastText ->
+                Toast.makeText(
+                    this@RegisterActivity, toastText, Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 
