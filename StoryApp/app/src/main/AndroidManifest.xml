@@ -35,7 +35,8 @@
             android:exported="false" />
         <activity
             android:name=".ui.home.HomeActivity"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -50,9 +51,6 @@
             android:exported="false" />
         <activity
             android:name=".ui.register.RegisterActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.main.MainActivity"
             android:exported="false" />
 
         <provider

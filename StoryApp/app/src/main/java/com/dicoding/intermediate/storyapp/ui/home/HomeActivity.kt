@@ -6,6 +6,7 @@ import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -48,15 +49,16 @@ class HomeActivity : AppCompatActivity() {
     private fun setupViewModel() {
         factory = ViewModelFactory.getInstance(this)
 
+        showLoading()
         homeViewModel.getSession().observe(this@HomeActivity) {
             token = it.token
             if (!it.isLogin) {
                 moveActivity()
             } else {
-                showLoading()
                 getListStories(token)
             }
         }
+        showToast()
     }
 
     private fun setupView() {
@@ -72,6 +74,14 @@ class HomeActivity : AppCompatActivity() {
     private fun showLoading() {
         homeViewModel.isLoading.observe(this@HomeActivity) {
             binding.pbHome.visibility = if (it) View.VISIBLE else View.GONE
+        }
+    }
+
+    private fun showToast() {
+        homeViewModel.toastText.observe(this@HomeActivity) { toastText ->
+            Toast.makeText(
+                this@HomeActivity, toastText, Toast.LENGTH_SHORT
+            ).show()
         }
     }
 

@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.dicoding.intermediate.storyapp.model.StoryRepository
+import com.dicoding.intermediate.storyapp.ui.add.AddStoryViewModel
 import com.dicoding.intermediate.storyapp.ui.home.HomeViewModel
 import com.dicoding.intermediate.storyapp.ui.login.LoginViewModel
 import com.dicoding.intermediate.storyapp.ui.register.RegisterViewModel
@@ -20,6 +21,9 @@ class ViewModelFactory(private val repo: StoryRepository) : ViewModelProvider.Ne
             }
             modelClass.isAssignableFrom(LoginViewModel::class.java) -> {
                 LoginViewModel(repo) as T
+            }
+            modelClass.isAssignableFrom(AddStoryViewModel::class.java) -> {
+                AddStoryViewModel(repo) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }

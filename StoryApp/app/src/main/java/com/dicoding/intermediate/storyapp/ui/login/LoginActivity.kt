@@ -10,7 +10,6 @@ import com.dicoding.intermediate.storyapp.R
 import com.dicoding.intermediate.storyapp.databinding.ActivityLoginBinding
 import com.dicoding.intermediate.storyapp.model.SessionModel
 import com.dicoding.intermediate.storyapp.ui.home.HomeActivity
-import com.dicoding.intermediate.storyapp.ui.main.MainActivity
 import com.dicoding.intermediate.storyapp.utils.ViewModelFactory
 
 class LoginActivity : AppCompatActivity() {

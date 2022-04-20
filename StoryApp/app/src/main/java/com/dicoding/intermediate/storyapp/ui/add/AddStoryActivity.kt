@@ -20,10 +20,7 @@ import com.dicoding.intermediate.storyapp.R
 import com.dicoding.intermediate.storyapp.databinding.ActivityAddStoryBinding
 import com.dicoding.intermediate.storyapp.ui.home.HomeActivity
 import com.dicoding.intermediate.storyapp.ui.welcome.WelcomeActivity
-import com.dicoding.intermediate.storyapp.utils.ViewModelFactory
-import com.dicoding.intermediate.storyapp.utils.createCustomTempFile
-import com.dicoding.intermediate.storyapp.utils.reduceFileImage
-import com.dicoding.intermediate.storyapp.utils.uriToFile
+import com.dicoding.intermediate.storyapp.utils.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -91,7 +88,10 @@ class AddStoryActivity : AppCompatActivity() {
             val myFile = File(currentPhotoPath)
             getFile = myFile
 
-            val result = BitmapFactory.decodeFile(getFile?.path)
+            val result = rotateBitmap(
+                BitmapFactory.decodeFile(getFile?.path),
+                true
+            )
             binding.ivAddStory.setImageBitmap(result)
         }
     }
@@ -134,6 +134,7 @@ class AddStoryActivity : AppCompatActivity() {
     }
 
     private fun uploadStory() {
+        showLoading()
         addStoryViewModel.getSession().observe(this@AddStoryActivity) {
             if (getFile != null) {
                 val file = reduceFileImage(getFile as File)
@@ -165,10 +166,11 @@ class AddStoryActivity : AppCompatActivity() {
     ) {
         addStoryViewModel.uploadStory(token, file, description)
         addStoryViewModel.uploadResponse.observe(this@AddStoryActivity) {
-            showLoading()
-            moveActivity()
-            showToast()
+            if (!it.error) {
+                moveActivity()
+            }
         }
+        showToast()
     }
 
     private fun showLoading() {

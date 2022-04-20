@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 class HomeViewModel(private val repo: StoryRepository) : ViewModel() {
     val list: LiveData<StoriesResponse> = repo.list
     val isLoading: LiveData<Boolean> = repo.isLoading
+    val toastText: LiveData<String> = repo.toastText
 
     fun getListStories(token: String) {
         viewModelScope.launch {
