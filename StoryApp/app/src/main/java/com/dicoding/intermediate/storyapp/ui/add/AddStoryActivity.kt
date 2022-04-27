@@ -19,7 +19,6 @@ import androidx.core.content.FileProvider
 import com.dicoding.intermediate.storyapp.R
 import com.dicoding.intermediate.storyapp.databinding.ActivityAddStoryBinding
 import com.dicoding.intermediate.storyapp.ui.home.HomeActivity
-import com.dicoding.intermediate.storyapp.ui.welcome.WelcomeActivity
 import com.dicoding.intermediate.storyapp.utils.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -124,6 +123,7 @@ class AddStoryActivity : AppCompatActivity() {
             binding.ivAddStory.setImageURI(selectedImg)
         }
     }
+
     private fun startGallery() {
         val intent = Intent()
         intent.action = ACTION_GET_CONTENT

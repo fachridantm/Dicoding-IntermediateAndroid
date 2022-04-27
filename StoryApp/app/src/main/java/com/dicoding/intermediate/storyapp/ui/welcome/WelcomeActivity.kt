@@ -46,12 +46,10 @@ class WelcomeActivity : AppCompatActivity() {
     private fun setupAction() {
         binding.apply {
             btnLoginWelcome.setOnClickListener {
-                val intent = Intent(this@WelcomeActivity, LoginActivity::class.java)
-                startActivity(intent)
+                startActivity(Intent(this@WelcomeActivity, LoginActivity::class.java))
             }
             btnRegisterWelcome.setOnClickListener {
-                val intent = Intent(this@WelcomeActivity, RegisterActivity::class.java)
-                startActivity(intent)
+                startActivity(Intent(this@WelcomeActivity, RegisterActivity::class.java))
             }
         }
     }
