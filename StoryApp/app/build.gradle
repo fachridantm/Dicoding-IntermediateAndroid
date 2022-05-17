@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-parcelize'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 android {
@@ -49,6 +50,7 @@ dependencies {
     implementation "androidx.activity:activity-ktx:1.4.0"
     implementation "androidx.fragment:fragment-ktx:1.4.1"
     implementation "com.github.kirich1409:viewbindingpropertydelegate:1.5.3"
+    implementation 'com.google.android.gms:play-services-maps:18.0.2'
 
     // Lifecycle
     def lifecycle_version = "2.4.1"
