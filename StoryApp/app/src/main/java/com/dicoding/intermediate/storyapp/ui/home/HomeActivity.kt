@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.intermediate.storyapp.R
 import com.dicoding.intermediate.storyapp.databinding.ActivityHomeBinding
 import com.dicoding.intermediate.storyapp.ui.add.AddStoryActivity
+import com.dicoding.intermediate.storyapp.ui.maps.MapsActivity
 import com.dicoding.intermediate.storyapp.ui.welcome.WelcomeActivity
 import com.dicoding.intermediate.storyapp.utils.ViewModelFactory
 
@@ -114,6 +115,10 @@ class HomeActivity : AppCompatActivity() {
             }
             R.id.btn_logout -> {
                 homeViewModel.logout()
+                true
+            }
+            R.id.btn_maps -> {
+                startActivity(Intent(this, MapsActivity::class.java))
                 true
             }
             else -> super.onOptionsItemSelected(item)
