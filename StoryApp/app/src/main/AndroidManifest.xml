@@ -34,8 +34,7 @@
 
         <activity
             android:name=".ui.maps.MapsActivity"
-            android:exported="false"
-            android:label="@string/title_activity_maps" />
+            android:exported="false" />
         <activity
             android:name=".ui.add.AddStoryActivity"
             android:exported="false" />
