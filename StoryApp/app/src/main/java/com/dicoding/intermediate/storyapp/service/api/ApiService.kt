@@ -24,7 +24,8 @@ interface ApiService {
 
     @GET("stories")
     fun getListStories(
-        @Header("Authorization") token: String
+        @Header("Authorization") token: String,
+        @Query("location") loc : Int = 1
     ):Call<StoriesResponse>
 
     @Multipart
@@ -34,10 +35,4 @@ interface ApiService {
         @Part file: MultipartBody.Part,
         @Part("description") description: RequestBody
     ):Call<AddStoryResponse>
-
-    @GET("stories")
-    fun getListStorieswithLocation(
-        @Header("Authorization") token: String,
-        @Query("location") loc : Int = 1
-    ):Call<StoriesResponseWithLocation>
 }
