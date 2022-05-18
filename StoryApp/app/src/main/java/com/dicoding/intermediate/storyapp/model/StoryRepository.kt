@@ -4,11 +4,13 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.liveData
 import com.dicoding.intermediate.storyapp.service.api.ApiService
-import com.dicoding.intermediate.storyapp.service.response.AddStoryResponse
-import com.dicoding.intermediate.storyapp.service.response.LoginResponse
-import com.dicoding.intermediate.storyapp.service.response.RegisterResponse
-import com.dicoding.intermediate.storyapp.service.response.StoriesResponse
+import com.dicoding.intermediate.storyapp.service.response.*
+import com.dicoding.intermediate.storyapp.ui.home.StoryPagingSource
 import com.dicoding.intermediate.storyapp.utils.Event
 import com.dicoding.intermediate.storyapp.utils.SessionPreferences
 import okhttp3.MultipartBody
@@ -97,9 +99,20 @@ class StoryRepository private constructor(
         })
     }
 
-    fun getListStories(token: String) {
+    fun getStories(): LiveData<PagingData<ListStoryItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 5
+            ),
+            pagingSourceFactory = {
+                StoryPagingSource(apiService, pref)
+            }
+        ).liveData
+    }
+
+    fun getListStoriesWithLocation(token: String) {
         _isLoading.value = true
-        val client = apiService.getListStories(token)
+        val client = apiService.getListStoriesWithLocation(token)
 
         client.enqueue(object : Callback<StoriesResponse> {
             override fun onResponse(

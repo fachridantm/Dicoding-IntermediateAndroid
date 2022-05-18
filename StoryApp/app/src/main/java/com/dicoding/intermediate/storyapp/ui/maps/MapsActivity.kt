@@ -1,9 +1,12 @@
 package com.dicoding.intermediate.storyapp.ui.maps
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.dicoding.intermediate.storyapp.R
 import com.dicoding.intermediate.storyapp.databinding.ActivityMapsBinding
 import com.dicoding.intermediate.storyapp.ui.home.HomeViewModel
@@ -28,28 +31,36 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         setupView()
         setupMap() // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         setupViewModel()
-        setupSession()
-        setupList()
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        mMap.uiSettings.isZoomControlsEnabled = true
-        mMap.uiSettings.isIndoorLevelPickerEnabled = true
-        mMap.uiSettings.isCompassEnabled = true
-        mMap.uiSettings.isMapToolbarEnabled = true
+
+        mMap.uiSettings.apply {
+            isZoomControlsEnabled = true
+            isIndoorLevelPickerEnabled = true
+            isCompassEnabled = true
+            isMapToolbarEnabled = true
+        }
+
+        setupSession()
+        setupList()
+        getMyLocation()
+
     }
 
-    private fun setupList() {
-        homeViewModel.list.observe(this@MapsActivity){
-            it?.listStory?.forEach { list ->
-                mMap.addMarker(
-                    MarkerOptions()
-                        .position(LatLng(list.lat, list.lon))
-                        .title("User : ${list.name}")
-                )
-            }
-        }
+    private fun setupView() {
+        binding = ActivityMapsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+    }
+
+    private fun setupMap() {
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+    }
+
+    private fun setupViewModel() {
+        factory = ViewModelFactory.getInstance(this)
     }
 
     private fun setupSession() {
@@ -59,22 +70,41 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun setupViewModel() {
-        factory = ViewModelFactory.getInstance(this)
+    private fun setupList() {
+        homeViewModel.list.observe(this@MapsActivity) {
+            it?.listStory?.forEach { list ->
+                mMap.addMarker(
+                    MarkerOptions()
+                        .position(LatLng(list.lat, list.lon))
+                        .title("Story from : ${list.name}")
+                        .snippet("ID : ${list.id}")
+                )
+            }
+        }
     }
 
-    private fun getStories(token: String){
-        homeViewModel.getListStories(token)
+    private fun getStories(token: String) {
+        homeViewModel.getListStoriesWithLocation(token)
     }
 
-    private fun setupMap() {
-        val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
-    }
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                getMyLocation()
+            }
+        }
 
-    private fun setupView() {
-        binding = ActivityMapsBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    private fun getMyLocation() {
+        if (ContextCompat.checkSelfPermission(
+                this.applicationContext,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            mMap.isMyLocationEnabled = true
+        } else {
+            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
     }
 }

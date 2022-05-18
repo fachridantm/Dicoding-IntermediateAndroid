@@ -20,6 +20,7 @@ import com.dicoding.intermediate.storyapp.utils.ViewModelFactory
 class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
     private lateinit var factory: ViewModelFactory
+    private lateinit var storyAdapter: ListStoryAdapter
     private var token = ""
     private val homeViewModel: HomeViewModel by viewModels { factory }
 
@@ -29,6 +30,7 @@ class HomeActivity : AppCompatActivity() {
         setupView()
         setupViewModel()
         setupAdapter()
+        setupUser()
         setupAction()
     }
 
@@ -38,38 +40,42 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupAdapter() {
-        homeViewModel.list.observe(this@HomeActivity) { adapter ->
-            if (adapter != null) {
-                binding.rvStories.adapter = ListStoryAdapter(adapter.listStory)
-            }
-
-        }
-    }
-
-    private fun setupViewModel() {
-        factory = ViewModelFactory.getInstance(this)
-
+    private fun setupUser() {
         showLoading()
         homeViewModel.getSession().observe(this@HomeActivity) {
             token = it.token
             if (!it.isLogin) {
                 moveActivity()
             } else {
-                getListStories(token)
+                setupData()
             }
         }
         showToast()
     }
 
+    private fun setupData() {
+        homeViewModel.getListStories.observe(this@HomeActivity) {
+            storyAdapter.submitData(lifecycle, it)
+        }
+    }
+
+    private fun setupAdapter() {
+        storyAdapter = ListStoryAdapter()
+        binding.rvStories.layoutManager = LinearLayoutManager(this@HomeActivity)
+        binding.rvStories.adapter = storyAdapter.withLoadStateFooter(
+            footer = LoadingStateAdapter {
+                storyAdapter.retry()
+            }
+        )
+    }
+
+    private fun setupViewModel() {
+        factory = ViewModelFactory.getInstance(this)
+    }
+
     private fun setupView() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.apply {
-            rvStories.setHasFixedSize(true)
-            rvStories.layoutManager = LinearLayoutManager(this@HomeActivity)
-        }
     }
 
     private fun showLoading() {
@@ -93,10 +99,6 @@ class HomeActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun getListStories(token: String) {
-        homeViewModel.getListStories(token)
-    }
-
     override fun onBackPressed() {
         super.onBackPressed()
         finishAffinity()
@@ -118,7 +120,7 @@ class HomeActivity : AppCompatActivity() {
                 true
             }
             R.id.btn_maps -> {
-                startActivity(Intent(this, MapsActivity::class.java))
+                startActivity(Intent(this@HomeActivity, MapsActivity::class.java))
                 true
             }
             else -> super.onOptionsItemSelected(item)

@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -15,10 +17,10 @@ import com.dicoding.intermediate.storyapp.service.response.ListStoryItem
 import com.dicoding.intermediate.storyapp.ui.detail.DetailActivity
 import com.dicoding.intermediate.storyapp.ui.detail.DetailActivity.Companion.EXTRA_DATA
 
-class ListStoryAdapter(private val listStories: List<ListStoryItem>) :
-    RecyclerView.Adapter<ListStoryAdapter.ListViewHolder>() {
+class ListStoryAdapter :
+    PagingDataAdapter<ListStoryItem, ListStoryAdapter.ListViewHolder>(DIFF_CALLBACK) {
 
-    inner class ListViewHolder(private val binding: ItemRowStoryBinding) :
+    class ListViewHolder(private val binding: ItemRowStoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(story: ListStoryItem) {
             binding.apply {
@@ -56,8 +58,32 @@ class ListStoryAdapter(private val listStories: List<ListStoryItem>) :
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        holder.bind(listStories[position])
+        val story = getItem(position)
+        if (story != null) {
+            holder.bind(story)
+        }
     }
 
-    override fun getItemCount(): Int = listStories.size
+    companion object {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListStoryItem>() {
+
+            override fun areItemsTheSame(
+                oldStory: ListStoryItem,
+                newStory: ListStoryItem
+            ): Boolean {
+                return oldStory == newStory
+            }
+
+            override fun areContentsTheSame(
+                oldStory: ListStoryItem,
+                newStory: ListStoryItem
+            ): Boolean {
+                return oldStory.name == newStory.name &&
+                        oldStory.photo == newStory.photo &&
+                        oldStory.id == newStory.id &&
+                        oldStory.description == newStory.description
+            }
+        }
+    }
+
 }

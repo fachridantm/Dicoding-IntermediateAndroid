@@ -28,4 +28,6 @@
     <string name="input_image">Please input the image file first!</string>
     <string name="email_validation">Enter a valid email address!</string>
     <string name="maps">Maps</string>
+    <string name="title_activity_maps" translatable="false" >MapsActivity</string>
+    <string name="retry">Retry</string>
 </resources>

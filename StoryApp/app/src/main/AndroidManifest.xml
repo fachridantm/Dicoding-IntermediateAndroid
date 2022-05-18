@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.dicoding.intermediate.storyapp">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -34,7 +36,8 @@
 
         <activity
             android:name=".ui.maps.MapsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:label="@string/title_activity_maps" />
         <activity
             android:name=".ui.add.AddStoryActivity"
             android:exported="false" />

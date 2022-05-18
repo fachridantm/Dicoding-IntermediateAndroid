@@ -60,6 +60,7 @@
             android:id="@+id/edt_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/bg_edt_default"
             android:ems="10"
             android:inputType="text"
             app:passwordToggleEnabled="true" />
@@ -89,7 +90,7 @@
         app:layout_constraintTop_toBottomOf="@id/tv_email"
         app:startIconDrawable="@drawable/ic_email">
 
-        <com.dicoding.intermediate.storyapp.ui.custom.EmailEditText
+        <com.dicoding.intermediate.storyapp.ui.custom.CustomEditText
             android:id="@+id/edt_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -122,7 +123,7 @@
         app:passwordToggleEnabled="true"
         app:startIconDrawable="@drawable/ic_lock">
 
-        <com.dicoding.intermediate.storyapp.ui.custom.PasswordEditText
+        <com.dicoding.intermediate.storyapp.ui.custom.CustomEditText
             android:id="@+id/edt_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
