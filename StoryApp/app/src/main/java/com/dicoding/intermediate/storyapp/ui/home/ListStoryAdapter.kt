@@ -78,9 +78,8 @@ class ListStoryAdapter :
                 oldStory: ListStoryItem,
                 newStory: ListStoryItem
             ): Boolean {
-                return oldStory.name == newStory.name &&
-                        oldStory.photo == newStory.photo &&
-                        oldStory.id == newStory.id &&
+                return oldStory.photo == newStory.photo &&
+                        oldStory.name == newStory.name &&
                         oldStory.description == newStory.description
             }
         }

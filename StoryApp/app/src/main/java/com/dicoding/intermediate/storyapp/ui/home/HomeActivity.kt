@@ -61,12 +61,14 @@ class HomeActivity : AppCompatActivity() {
 
     private fun setupAdapter() {
         storyAdapter = ListStoryAdapter()
-        binding.rvStories.layoutManager = LinearLayoutManager(this@HomeActivity)
-        binding.rvStories.adapter = storyAdapter.withLoadStateFooter(
-            footer = LoadingStateAdapter {
-                storyAdapter.retry()
-            }
-        )
+        binding.rvStories.apply {
+            layoutManager = LinearLayoutManager(this@HomeActivity)
+            adapter = storyAdapter.withLoadStateFooter(
+                footer = LoadingStateAdapter {
+                    storyAdapter.retry()
+                }
+            )
+        }
     }
 
     private fun setupViewModel() {
