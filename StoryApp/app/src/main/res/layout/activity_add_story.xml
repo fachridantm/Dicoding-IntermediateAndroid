@@ -13,10 +13,10 @@
         android:layout_marginHorizontal="24dp"
         android:layout_marginTop="24dp"
         android:contentDescription="@string/add_story"
+        android:src="@drawable/ic_insert_photo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@drawable/ic_launcher_background" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btn_take_picture"
