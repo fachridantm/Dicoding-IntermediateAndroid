@@ -30,8 +30,8 @@ class HomeActivity : AppCompatActivity() {
         setupView()
         setupViewModel()
         setupAdapter()
-        setupUser()
         setupAction()
+        setupUser()
     }
 
     private fun setupAction() {
@@ -54,8 +54,8 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setupData() {
-        homeViewModel.getListStories.observe(this@HomeActivity) {
-            storyAdapter.submitData(lifecycle, it)
+        homeViewModel.getListStories.observe(this@HomeActivity) { pagingData ->
+            storyAdapter.submitData(lifecycle, pagingData)
         }
     }
 

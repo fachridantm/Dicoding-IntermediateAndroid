@@ -9,8 +9,8 @@ import com.dicoding.intermediate.storyapp.utils.SessionPreferences
 import kotlinx.coroutines.flow.first
 
 class StoryPagingSource(
-    private val apiService: ApiService,
-    private val pref: SessionPreferences
+    private val pref: SessionPreferences,
+    private val apiService: ApiService
 ) : PagingSource<Int, ListStoryItem>() {
 
     override fun getRefreshKey(state: PagingState<Int, ListStoryItem>): Int? {
@@ -35,12 +35,14 @@ class StoryPagingSource(
                         nextKey = if (responseData.body()?.listStory.isNullOrEmpty()) null else position + 1
                     )
                 } else {
+                    Log.d("Token", "Load Error: $token")
                     LoadResult.Error(Exception("Failed"))
                 }
             } else {
                 LoadResult.Error(Exception("Failed"))
             }
         } catch (e: Exception) {
+            Log.d("Exception", "Load Error: ${e.message}")
             return LoadResult.Error(e)
         }
     }

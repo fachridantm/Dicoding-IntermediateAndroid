@@ -18,7 +18,20 @@ import com.dicoding.intermediate.storyapp.ui.detail.DetailActivity
 import com.dicoding.intermediate.storyapp.ui.detail.DetailActivity.Companion.EXTRA_DATA
 
 class ListStoryAdapter :
-    PagingDataAdapter<ListStoryItem, ListStoryAdapter.ListViewHolder>(DIFF_CALLBACK) {
+    PagingDataAdapter<ListStoryItem, ListStoryAdapter.ListViewHolder>(DIFF_ITEM_CALLBACK) {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
+        val binding =
+            ItemRowStoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ListViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
+        val story = getItem(position)
+        if (story != null) {
+            holder.bind(story)
+        }
+    }
 
     class ListViewHolder(private val binding: ItemRowStoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -51,22 +64,8 @@ class ListStoryAdapter :
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-        val binding =
-            ItemRowStoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ListViewHolder(binding)
-    }
-
-    override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        val story = getItem(position)
-        if (story != null) {
-            holder.bind(story)
-        }
-    }
-
     companion object {
-        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListStoryItem>() {
-
+        val DIFF_ITEM_CALLBACK = object : DiffUtil.ItemCallback<ListStoryItem>() {
             override fun areItemsTheSame(
                 oldStory: ListStoryItem,
                 newStory: ListStoryItem
@@ -78,11 +77,10 @@ class ListStoryAdapter :
                 oldStory: ListStoryItem,
                 newStory: ListStoryItem
             ): Boolean {
-                return oldStory.photo == newStory.photo &&
-                        oldStory.name == newStory.name &&
-                        oldStory.description == newStory.description
+                return oldStory.name == newStory.name &&
+                        oldStory.description == newStory.description &&
+                        oldStory.photo == newStory.photo
             }
         }
     }
-
 }

@@ -190,7 +190,9 @@ class AddStoryActivity : AppCompatActivity() {
     }
 
     private fun moveActivity() {
-        startActivity(Intent(this@AddStoryActivity, HomeActivity::class.java))
+        val intent = Intent(this@AddStoryActivity, HomeActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
         finish()
     }
 
