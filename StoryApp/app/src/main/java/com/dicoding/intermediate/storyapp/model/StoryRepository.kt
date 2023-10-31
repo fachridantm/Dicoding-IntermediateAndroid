@@ -9,28 +9,30 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.liveData
 import com.dicoding.intermediate.storyapp.service.api.ApiService
-import com.dicoding.intermediate.storyapp.service.response.*
+import com.dicoding.intermediate.storyapp.service.response.AddStoryResponse
+import com.dicoding.intermediate.storyapp.service.response.ListStoryItem
+import com.dicoding.intermediate.storyapp.service.response.LoginResponse
+import com.dicoding.intermediate.storyapp.service.response.RegisterResponse
+import com.dicoding.intermediate.storyapp.service.response.StoriesResponse
 import com.dicoding.intermediate.storyapp.ui.home.StoryPagingSource
 import com.dicoding.intermediate.storyapp.utils.Event
 import com.dicoding.intermediate.storyapp.utils.SessionPreferences
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.json.JSONException
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class StoryRepository private constructor(
-    private val pref: SessionPreferences,
-    private val apiService: ApiService
+    private val pref: SessionPreferences, private val apiService: ApiService
 ) {
     private val _registerResponse = MutableLiveData<RegisterResponse>()
     val registerResponse: LiveData<RegisterResponse> = _registerResponse
 
     private val _loginResponse = MutableLiveData<LoginResponse>()
     val loginResponse: LiveData<LoginResponse> = _loginResponse
-
-    private val _uploadResponse = MutableLiveData<AddStoryResponse>()
-    val uploadResponse: LiveData<AddStoryResponse> = _uploadResponse
 
     private val _list = MutableLiveData<StoriesResponse>()
     val list: LiveData<StoriesResponse> = _list
@@ -47,8 +49,7 @@ class StoryRepository private constructor(
 
         client.enqueue(object : Callback<RegisterResponse> {
             override fun onResponse(
-                call: Call<RegisterResponse>,
-                response: Response<RegisterResponse>
+                call: Call<RegisterResponse>, response: Response<RegisterResponse>
             ) {
                 _isLoading.value = false
                 if (response.isSuccessful && response.body() != null) {
@@ -76,8 +77,7 @@ class StoryRepository private constructor(
 
         client.enqueue(object : Callback<LoginResponse> {
             override fun onResponse(
-                call: Call<LoginResponse>,
-                response: Response<LoginResponse>
+                call: Call<LoginResponse>, response: Response<LoginResponse>
             ) {
                 _isLoading.value = false
                 if (response.isSuccessful && response.body() != null) {
@@ -100,14 +100,11 @@ class StoryRepository private constructor(
     }
 
     fun getStories(): LiveData<PagingData<ListStoryItem>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = 5
-            ),
-            pagingSourceFactory = {
-                StoryPagingSource(pref, apiService)
-            }
-        ).liveData
+        return Pager(config = PagingConfig(
+            pageSize = 5
+        ), pagingSourceFactory = {
+            StoryPagingSource(pref, apiService)
+        }).liveData
     }
 
     fun getListStoriesWithLocation(token: String) {
@@ -116,8 +113,7 @@ class StoryRepository private constructor(
 
         client.enqueue(object : Callback<StoriesResponse> {
             override fun onResponse(
-                call: Call<StoriesResponse>,
-                response: Response<StoriesResponse>
+                call: Call<StoriesResponse>, response: Response<StoriesResponse>
             ) {
                 _isLoading.value = false
                 if (response.isSuccessful && response.body() != null) {
@@ -144,28 +140,39 @@ class StoryRepository private constructor(
 
         client.enqueue(object : Callback<AddStoryResponse> {
             override fun onResponse(
-                call: Call<AddStoryResponse>,
-                response: Response<AddStoryResponse>
+                call: Call<AddStoryResponse>, response: Response<AddStoryResponse>
             ) {
                 _isLoading.value = false
-                if (response.isSuccessful && response.body() != null) {
-                    _uploadResponse.value = response.body()
+                if (response.isSuccessful && response.body() != null && response.body()?.error == false) {
                     _toastText.value = Event(response.body()?.message.toString())
                 } else {
-                    _toastText.value = Event(response.message().toString())
-                    Log.e(
-                        TAG,
-                        "onFailure: ${response.message()}, ${response.body()?.message.toString()}"
-                    )
+                    try {
+                        val jsonObject = response.errorBody()?.string()?.let { JSONObject(it) }
+                        val message = jsonObject?.getString("message")
+                        _toastText.value = Event(
+                            "${response.message()} ${response.code()}, $message"
+                        )
+                        Log.e(
+                            TAG,
+                            "onFailedUpload: ${response.message()}, Code = ${response.code()}, Message = $message"
+                        )
+                    } catch (e: JSONException) {
+                        _toastText.value = Event(
+                            "${response.message()} ${response.code()}, ${e.message}"
+                        )
+                        Log.e(
+                            TAG, "onFailedUploadJSON: ${response.message()}, Message = ${e.message}"
+                        )
+                    }
                 }
             }
 
             override fun onFailure(call: Call<AddStoryResponse>, t: Throwable) {
-                Log.d("error upload", t.message.toString())
+                _toastText.value = Event(t.message.toString())
+                Log.e("onFailure", t.message.toString())
             }
 
-        }
-        )
+        })
     }
 
     fun getSession(): LiveData<SessionModel> {
@@ -190,11 +197,9 @@ class StoryRepository private constructor(
         @Volatile
         private var instance: StoryRepository? = null
         fun getInstance(
-            preferences: SessionPreferences,
-            apiService: ApiService
-        ): StoryRepository =
-            instance ?: synchronized(this) {
-                instance ?: StoryRepository(preferences, apiService)
-            }.also { instance = it }
+            preferences: SessionPreferences, apiService: ApiService
+        ): StoryRepository = instance ?: synchronized(this) {
+            instance ?: StoryRepository(preferences, apiService)
+        }.also { instance = it }
     }
 }
