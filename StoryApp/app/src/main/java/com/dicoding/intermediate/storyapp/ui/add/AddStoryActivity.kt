@@ -81,7 +81,7 @@ class AddStoryActivity : AppCompatActivity() {
     }
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
-        ContextCompat.checkSelfPermission(baseContext, it) == PackageManager.PERMISSION_GRANTED
+        ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
     }
 
     private val launcherIntentCamera = registerForActivityResult(
@@ -142,7 +142,7 @@ class AddStoryActivity : AppCompatActivity() {
         addStoryViewModel.getSession().observe(this@AddStoryActivity) {
             if (getFile != null) {
                 val file = reduceFileImage(getFile as File)
-                val requestImageFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+                val requestImageFile = file.asRequestBody("image/*".toMediaTypeOrNull())
                 val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
                     "photo",
                     file.name,
