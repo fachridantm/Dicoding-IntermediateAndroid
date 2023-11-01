@@ -69,6 +69,9 @@ dependencies {
     implementation "androidx.datastore:datastore-preferences-rxjava2:${ds_version}"
     implementation "androidx.datastore:datastore-preferences-rxjava3:${ds_version}"
 
+    // Swipe Refresh Layout
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+
     // Testing
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

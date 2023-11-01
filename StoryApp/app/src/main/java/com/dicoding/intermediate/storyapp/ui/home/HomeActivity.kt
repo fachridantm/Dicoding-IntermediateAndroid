@@ -29,15 +29,18 @@ class HomeActivity : AppCompatActivity() {
 
         setupView()
         setupViewModel()
+        setupUser()
         setupAdapter()
         setupAction()
-        setupUser()
     }
 
-    private fun setupAction() {
-        binding.fabAdd.setOnClickListener {
-            startActivity(Intent(this, AddStoryActivity::class.java))
-        }
+    private fun setupView() {
+        binding = ActivityHomeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+    }
+
+    private fun setupViewModel() {
+        factory = ViewModelFactory.getInstance(this)
     }
 
     private fun setupUser() {
@@ -64,20 +67,23 @@ class HomeActivity : AppCompatActivity() {
         binding.rvStories.apply {
             layoutManager = LinearLayoutManager(this@HomeActivity)
             adapter = storyAdapter.withLoadStateFooter(
-                footer = LoadingStateAdapter {
-                    storyAdapter.retry()
-                }
+                footer = LoadingStateAdapter { storyAdapter.retry() }
             )
         }
     }
 
-    private fun setupViewModel() {
-        factory = ViewModelFactory.getInstance(this)
-    }
-
-    private fun setupView() {
-        binding = ActivityHomeBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    private fun setupAction() {
+        binding.apply {
+            fabAdd.setOnClickListener {
+                startActivity(Intent(this@HomeActivity, AddStoryActivity::class.java))
+            }
+            swipeRefresh.apply {
+                setOnRefreshListener {
+                    isRefreshing = false
+                    storyAdapter.refresh()
+                }
+            }
+        }
     }
 
     private fun showLoading() {
@@ -117,14 +123,17 @@ class HomeActivity : AppCompatActivity() {
                 startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
                 true
             }
+
             R.id.btn_logout -> {
                 homeViewModel.logout()
                 true
             }
+
             R.id.btn_maps -> {
                 startActivity(Intent(this@HomeActivity, MapsActivity::class.java))
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }

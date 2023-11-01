@@ -19,9 +19,9 @@ class HomeViewModel(private val repo: StoryRepository) : ViewModel() {
     val getListStories: LiveData<PagingData<ListStoryItem>> =
         repo.getStories().cachedIn(viewModelScope)
 
-    fun getListStoriesWithLocation(token: String) {
+    fun getLocationStories(token: String) {
         viewModelScope.launch {
-            repo.getListStoriesWithLocation(token)
+            repo.getLocationStories(token)
         }
     }
 
