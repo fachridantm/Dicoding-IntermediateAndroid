@@ -117,7 +117,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun moveActivity() {
         loginViewModel.loginResponse.observe(this@LoginActivity) { response ->
-            if (!response.error) {
+            if (response.error == false) {
                 startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
                 finish()
             }

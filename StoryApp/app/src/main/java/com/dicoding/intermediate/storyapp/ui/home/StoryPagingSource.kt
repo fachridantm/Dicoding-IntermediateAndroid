@@ -7,6 +7,8 @@ import com.dicoding.intermediate.storyapp.service.api.ApiService
 import com.dicoding.intermediate.storyapp.service.response.ListStoryItem
 import com.dicoding.intermediate.storyapp.utils.SessionPreferences
 import kotlinx.coroutines.flow.first
+import org.json.JSONObject
+import java.net.UnknownHostException
 
 class StoryPagingSource(
     private val pref: SessionPreferences,
@@ -26,24 +28,33 @@ class StoryPagingSource(
             val token = pref.getSession().first().token
 
             if (token.isNotEmpty()) {
-                val responseData = apiService.getListStories(token, position, params.loadSize)
-                if (responseData.isSuccessful) {
-                    Log.d("Story Paging Source", "Load: ${responseData.body()}")
+                val response = apiService.getListStories(token, position, params.loadSize)
+                if (response.isSuccessful) {
+                    Log.d("Story Paging Source", "Load Result: ${response.body()}")
                     LoadResult.Page(
-                        data = responseData.body()?.listStory ?: emptyList(),
+                        data = response.body()?.listStory ?: emptyList(),
                         prevKey = if (position == INITIAL_PAGE_INDEX) null else position - 1,
-                        nextKey = if (responseData.body()?.listStory.isNullOrEmpty()) null else position + 1
+                        nextKey = if (response.body()?.listStory.isNullOrEmpty()) null else position + 1
                     )
                 } else {
-                    Log.d("Token", "Load Error: $token")
-                    LoadResult.Error(Exception("Failed"))
+                    val jsonObject = response.errorBody()?.string()?.let { JSONObject(it) }
+                    val message = jsonObject?.getString("message")
+                    Log.e(
+                        "getListStories",
+                        "Load Error: ${response.message()}, ${response.code()} $message"
+                    )
+                    LoadResult.Error(Exception("Something went wrong"))
                 }
             } else {
-                LoadResult.Error(Exception("Failed"))
+                Log.e("Token", "Load Error: $token")
+                LoadResult.Error(Exception("Token is Empty"))
             }
+        } catch (e: UnknownHostException) {
+            Log.e("UnknownHostException", "Load Error: ${e.message}")
+            return LoadResult.Error(Exception("No Internet Connection"))
         } catch (e: Exception) {
-            Log.d("Exception", "Load Error: ${e.message}")
-            return LoadResult.Error(e)
+            Log.e("Exception", "Load Error: ${e.message}")
+            return LoadResult.Error(Exception(e.message))
         }
     }
 

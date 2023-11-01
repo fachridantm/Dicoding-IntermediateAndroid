@@ -31,8 +31,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
 
         setupView()
-        setupMap() // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         setupViewModel()
+        setupMap() // Obtain the SupportMapFragment and get notified when the map is ready to be used.
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -56,19 +56,44 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         setContentView(binding.root)
     }
 
+    private fun setupViewModel() {
+        factory = ViewModelFactory.getInstance(this)
+    }
+
     private fun setupMap() {
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-    }
-
-    private fun setupViewModel() {
-        factory = ViewModelFactory.getInstance(this)
     }
 
     private fun setupSession() {
         homeViewModel.getSession().observe(this@MapsActivity) {
             token = it.token
             getStories(token)
+        }
+    }
+
+    private fun getStories(token: String) {
+        homeViewModel.getLocationStories(token)
+    }
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                getMyLocation()
+            }
+        }
+
+    private fun getMyLocation() {
+        if (ContextCompat.checkSelfPermission(
+                this.applicationContext,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            mMap.isMyLocationEnabled = true
+        } else {
+            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         }
     }
 
@@ -103,31 +128,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     CameraUpdateFactory.newLatLngZoom(lastLocation, 15f)
                 )
             }
-        }
-    }
-
-    private fun getStories(token: String) {
-        homeViewModel.getListStoriesWithLocation(token)
-    }
-
-    private val requestPermissionLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted: Boolean ->
-            if (isGranted) {
-                getMyLocation()
-            }
-        }
-
-    private fun getMyLocation() {
-        if (ContextCompat.checkSelfPermission(
-                this.applicationContext,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            mMap.isMyLocationEnabled = true
-        } else {
-            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         }
     }
 }
