@@ -34,6 +34,9 @@ class StoryRepository private constructor(
     private val _loginResponse = MutableLiveData<LoginResponse>()
     val loginResponse: LiveData<LoginResponse> = _loginResponse
 
+    private val _uploadResponse = MutableLiveData<AddStoryResponse>()
+    val uploadResponse: LiveData<AddStoryResponse> = _uploadResponse
+
     private val _list = MutableLiveData<StoriesResponse>()
     val list: LiveData<StoriesResponse> = _list
 
@@ -65,6 +68,7 @@ class StoryRepository private constructor(
             }
 
             override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+                _isLoading.value = false
                 _toastText.value = Event(t.message.toString())
                 Log.e(TAG, "onFailure: ${t.message.toString()}")
             }
@@ -93,6 +97,7 @@ class StoryRepository private constructor(
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                _isLoading.value = false
                 _toastText.value = Event(t.message.toString())
                 Log.e(TAG, "onFailure: ${t.message.toString()}")
             }
@@ -128,6 +133,7 @@ class StoryRepository private constructor(
             }
 
             override fun onFailure(call: Call<StoriesResponse>, t: Throwable) {
+                _isLoading.value = false
                 _toastText.value = Event(t.message.toString())
                 Log.e(TAG, "onFailure: ${t.message.toString()}")
             }
@@ -144,17 +150,20 @@ class StoryRepository private constructor(
             ) {
                 _isLoading.value = false
                 if (response.isSuccessful && response.body() != null && response.body()?.error == false) {
+                    _uploadResponse.value = response.body()
                     _toastText.value = Event(response.body()?.message.toString())
                 } else {
                     try {
                         val jsonObject = response.errorBody()?.string()?.let { JSONObject(it) }
+                        val error = jsonObject?.getBoolean("error")
                         val message = jsonObject?.getString("message")
+                        _uploadResponse.value = AddStoryResponse(error, message)
                         _toastText.value = Event(
                             "${response.message()} ${response.code()}, $message"
                         )
                         Log.e(
                             TAG,
-                            "onFailedUpload: ${response.message()}, Code = ${response.code()}, Message = $message"
+                            "onFailedUpload: ${response.message()}, Code = ${response.code()}, Error = $error, Message = $message"
                         )
                     } catch (e: JSONException) {
                         _toastText.value = Event(
@@ -168,6 +177,7 @@ class StoryRepository private constructor(
             }
 
             override fun onFailure(call: Call<AddStoryResponse>, t: Throwable) {
+                _isLoading.value = false
                 _toastText.value = Event(t.message.toString())
                 Log.e("onFailure", t.message.toString())
             }

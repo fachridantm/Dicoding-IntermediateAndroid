@@ -7,9 +7,14 @@ import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.net.Uri
 import android.os.Environment
-import java.io.*
+import androidx.exifinterface.media.ExifInterface
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
+import java.io.OutputStream
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 private const val FILENAME_FORMAT = "dd-MMM-yyyy"
 
@@ -40,7 +45,19 @@ fun uriToFile(selectedImg: Uri, context: Context): File {
 }
 
 fun reduceFileImage(file: File): File {
-    val bitmap = BitmapFactory.decodeFile(file.path)
+    val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+    val ei = ExifInterface(file.absolutePath)
+    val orientation: Int = ei.getAttributeInt(
+        ExifInterface.TAG_ORIENTATION,
+        ExifInterface.ORIENTATION_UNDEFINED
+    )
+    val rotatedBitmap = when (orientation) {
+        ExifInterface.ORIENTATION_ROTATE_90 -> rotateBitmap(bitmap, true)
+        ExifInterface.ORIENTATION_ROTATE_180 -> rotateBitmap(bitmap, false)
+        ExifInterface.ORIENTATION_ROTATE_270 -> rotateBitmap(bitmap, true)
+        ExifInterface.ORIENTATION_NORMAL -> bitmap
+        else -> bitmap
+    }
     var compressQuality = 100
     var streamLength: Int
     val bitmapJpeg = Bitmap.CompressFormat.JPEG
@@ -48,12 +65,12 @@ fun reduceFileImage(file: File): File {
 
     do {
         val bmpStream = ByteArrayOutputStream()
-        bitmap.compress(bitmapJpeg, compressQuality, bmpStream)
+        rotatedBitmap.compress(bitmapJpeg, compressQuality, bmpStream)
         val bmpPicByteArray = bmpStream.toByteArray()
         streamLength = bmpPicByteArray.size
         compressQuality -= 5
     } while (streamLength > 1000000)
-    bitmap.compress(bitmapJpeg, compressQuality, outputStream)
+    rotatedBitmap.compress(bitmapJpeg, compressQuality, outputStream)
 
     return file
 }

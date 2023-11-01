@@ -28,7 +28,6 @@ import com.dicoding.intermediate.storyapp.utils.uriToFile
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
@@ -146,18 +145,24 @@ class AddStoryActivity : AppCompatActivity() {
         showLoading()
         addStoryViewModel.getSession().observe(this@AddStoryActivity) {
             if (getFile != null) {
-                val file = reduceFileImage(getFile as File)
-                val requestImageFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+                val reducedFile = reduceFileImage(getFile as File)
+                val requestImageFile = reducedFile.asRequestBody("image/*".toMediaTypeOrNull())
                 val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
                     "photo",
-                    file.name,
+                    reducedFile.name,
                     requestImageFile
                 )
-                uploadResponse(
+                addStoryViewModel.uploadStory(
                     it.token,
                     imageMultipart,
                     binding.edtDescStory.text.toString().toRequestBody("text/plain".toMediaType())
                 )
+                addStoryViewModel.uploadResponse.observe(this@AddStoryActivity) { response ->
+                    if (response.error == false && !binding.edtDescStory.text.isNullOrEmpty()) {
+                        moveActivity()
+                    }
+                }
+                showToast()
             } else {
                 Toast.makeText(
                     this@AddStoryActivity,
@@ -166,18 +171,6 @@ class AddStoryActivity : AppCompatActivity() {
                 ).show()
             }
         }
-    }
-
-    private fun uploadResponse(
-        token: String,
-        file: MultipartBody.Part,
-        description: RequestBody
-    ) {
-        addStoryViewModel.uploadStory(token, file, description)
-        if (!binding.edtDescStory.text.isNullOrEmpty()) {
-            moveActivity()
-        }
-        showToast()
     }
 
     private fun showLoading() {
