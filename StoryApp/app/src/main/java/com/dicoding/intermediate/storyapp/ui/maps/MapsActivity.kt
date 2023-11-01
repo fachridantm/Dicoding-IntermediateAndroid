@@ -2,6 +2,7 @@ package com.dicoding.intermediate.storyapp.ui.maps
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -11,6 +12,7 @@ import com.dicoding.intermediate.storyapp.R
 import com.dicoding.intermediate.storyapp.databinding.ActivityMapsBinding
 import com.dicoding.intermediate.storyapp.ui.home.HomeViewModel
 import com.dicoding.intermediate.storyapp.utils.ViewModelFactory
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -78,6 +80,27 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         .position(LatLng(list.lat, list.lon))
                         .title("Story from : ${list.name}")
                         .snippet("ID : ${list.id}")
+                )
+            }
+            if (it.listStory.isNotEmpty()) {
+                val random = (0 until it.listStory.size).random()
+                mMap.animateCamera(
+                    CameraUpdateFactory.newLatLngZoom(
+                        LatLng(
+                            it.listStory[random].lat,
+                            it.listStory[random].lon
+                        ), 15f
+                    )
+                )
+            } else {
+                val lastLocation = mMap.myLocation.let { location: Location? ->
+                    LatLng(
+                        location?.latitude ?: 0.0,
+                        location?.longitude ?: 0.0
+                    )
+                }
+                mMap.animateCamera(
+                    CameraUpdateFactory.newLatLngZoom(lastLocation, 15f)
                 )
             }
         }
