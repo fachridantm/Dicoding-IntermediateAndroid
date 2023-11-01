@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import com.bumptech.glide.Glide
 import com.dicoding.intermediate.storyapp.R
 import com.dicoding.intermediate.storyapp.databinding.ActivityAddStoryBinding
 import com.dicoding.intermediate.storyapp.ui.home.HomeActivity
@@ -95,7 +96,9 @@ class AddStoryActivity : AppCompatActivity() {
                 BitmapFactory.decodeFile(getFile?.path),
                 true
             )
-            binding.ivAddStory.setImageBitmap(result)
+            Glide.with(this@AddStoryActivity)
+                .load(result)
+                .into(binding.ivAddStory)
         }
     }
 
@@ -124,7 +127,9 @@ class AddStoryActivity : AppCompatActivity() {
             val myFile = uriToFile(selectedImg, this)
 
             getFile = myFile
-            binding.ivAddStory.setImageURI(selectedImg)
+            Glide.with(this@AddStoryActivity)
+                .load(selectedImg)
+                .into(binding.ivAddStory)
         }
     }
 
