@@ -24,6 +24,7 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.net.UnknownHostException
 
 class StoryRepository private constructor(
     private val pref: SessionPreferences, private val apiService: ApiService
@@ -54,23 +55,40 @@ class StoryRepository private constructor(
             override fun onResponse(
                 call: Call<RegisterResponse>, response: Response<RegisterResponse>
             ) {
-                _isLoading.value = false
-                if (response.isSuccessful && response.body() != null) {
-                    _registerResponse.value = response.body()
-                    _toastText.value = Event(response.body()?.message.toString())
-                } else {
-                    _toastText.value = Event(response.message().toString())
-                    Log.e(
-                        TAG,
-                        "onFailure: ${response.message()}, ${response.body()?.message.toString()}"
-                    )
+                try {
+                    _isLoading.value = false
+                    if (response.isSuccessful && response.body() != null) {
+                        _registerResponse.value = response.body()
+                        _toastText.value = Event(response.body()?.message.toString())
+                    } else {
+                        val jsonObject = response.errorBody()?.string()?.let { JSONObject(it) }
+                        val error = jsonObject?.getBoolean("error")
+                        val message = jsonObject?.getString("message")
+                        _registerResponse.value = RegisterResponse(error, message)
+                        _toastText.value = Event(
+                            "${response.message()} ${response.code()}, $message"
+                        )
+                        Log.e(
+                            "postRegister",
+                            "onResponse: ${response.message()}, ${response.code()} $message"
+                        )
+                    }
+                } catch (e: JSONException) {
+                    _toastText.value = Event(e.message.toString())
+                    Log.e("JSONException", "onFailure: ${e.message.toString()}")
+                } catch (e: UnknownHostException) {
+                    _toastText.value = Event("No Internet Connection")
+                    Log.e("UnknownHostException", "onFailure: ${e.message.toString()}")
+                } catch (e: Exception) {
+                    _toastText.value = Event(e.message.toString())
+                    Log.e("Exception", "onFailure: ${e.message.toString()}")
                 }
             }
 
             override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
                 _isLoading.value = false
                 _toastText.value = Event(t.message.toString())
-                Log.e(TAG, "onFailure: ${t.message.toString()}")
+                Log.e("postRegister", "onFailure: ${t.message.toString()}")
             }
         })
     }
@@ -83,23 +101,40 @@ class StoryRepository private constructor(
             override fun onResponse(
                 call: Call<LoginResponse>, response: Response<LoginResponse>
             ) {
-                _isLoading.value = false
-                if (response.isSuccessful && response.body() != null) {
-                    _loginResponse.value = response.body()
-                    _toastText.value = Event(response.body()?.message.toString())
-                } else {
-                    _toastText.value = Event(response.message().toString())
-                    Log.e(
-                        TAG,
-                        "onFailure: ${response.message()}, ${response.body()?.message.toString()}"
-                    )
+                try {
+                    _isLoading.value = false
+                    if (response.isSuccessful && response.body() != null) {
+                        _loginResponse.value = response.body()
+                        _toastText.value = Event(response.body()?.message.toString())
+                    } else {
+                        val jsonObject = response.errorBody()?.string()?.let { JSONObject(it) }
+                        val error = jsonObject?.getBoolean("error")
+                        val message = jsonObject?.getString("message")
+                        _loginResponse.value = LoginResponse(error, message, null)
+                        _toastText.value = Event(
+                            "${response.message()} ${response.code()}, $message"
+                        )
+                        Log.e(
+                            "postLogin",
+                            "onResponse: ${response.message()}, ${response.code()} $message"
+                        )
+                    }
+                } catch (e: JSONException) {
+                    _toastText.value = Event(e.message.toString())
+                    Log.e("JSONException", "onFailure: ${e.message.toString()}")
+                } catch (e: UnknownHostException) {
+                    _toastText.value = Event("No Internet Connection")
+                    Log.e("UnknownHostException", "onFailure: ${e.message.toString()}")
+                } catch (e: Exception) {
+                    _toastText.value = Event(e.message.toString())
+                    Log.e("Exception", "onFailure: ${e.message.toString()}")
                 }
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                 _isLoading.value = false
                 _toastText.value = Event(t.message.toString())
-                Log.e(TAG, "onFailure: ${t.message.toString()}")
+                Log.e("postLogin", "onFailure: ${t.message.toString()}")
             }
         })
     }
@@ -112,7 +147,7 @@ class StoryRepository private constructor(
         }).liveData
     }
 
-    fun getListStoriesWithLocation(token: String) {
+    fun getLocationStories(token: String) {
         _isLoading.value = true
         val client = apiService.getListStoriesWithLocation(token)
 
@@ -120,22 +155,39 @@ class StoryRepository private constructor(
             override fun onResponse(
                 call: Call<StoriesResponse>, response: Response<StoriesResponse>
             ) {
-                _isLoading.value = false
-                if (response.isSuccessful && response.body() != null) {
-                    _list.value = response.body()
-                } else {
-                    _toastText.value = Event(response.message().toString())
-                    Log.e(
-                        TAG,
-                        "onFailure: ${response.message()}, ${response.body()?.message.toString()}"
-                    )
+                try {
+                    _isLoading.value = false
+                    if (response.isSuccessful && response.body() != null) {
+                        _list.value = response.body()
+                    } else {
+                        val jsonObject = response.errorBody()?.string()?.let { JSONObject(it) }
+                        val error = jsonObject?.getBoolean("error")
+                        val message = jsonObject?.getString("message")
+                        _list.value = StoriesResponse(emptyList(), error, message)
+                        _toastText.value = Event(
+                            "${response.message()} ${response.code()}, $message"
+                        )
+                        Log.e(
+                            "getLocationStories",
+                            "onResponse: ${response.message()}, ${response.code()} $message"
+                        )
+                    }
+                } catch (e: JSONException) {
+                    _toastText.value = Event(e.message.toString())
+                    Log.e("JSONException", "onFailure: ${e.message.toString()}")
+                } catch (e: UnknownHostException) {
+                    _toastText.value = Event("No Internet Connection")
+                    Log.e("UnknownHostException", "onFailure: ${e.message.toString()}")
+                } catch (e: Exception) {
+                    _toastText.value = Event(e.message.toString())
+                    Log.e("Exception", "onFailure: ${e.message.toString()}")
                 }
             }
 
             override fun onFailure(call: Call<StoriesResponse>, t: Throwable) {
                 _isLoading.value = false
                 _toastText.value = Event(t.message.toString())
-                Log.e(TAG, "onFailure: ${t.message.toString()}")
+                Log.e("getLocationStories", "onFailure: ${t.message.toString()}")
             }
         })
     }
@@ -148,12 +200,12 @@ class StoryRepository private constructor(
             override fun onResponse(
                 call: Call<AddStoryResponse>, response: Response<AddStoryResponse>
             ) {
-                _isLoading.value = false
-                if (response.isSuccessful && response.body() != null && response.body()?.error == false) {
-                    _uploadResponse.value = response.body()
-                    _toastText.value = Event(response.body()?.message.toString())
-                } else {
-                    try {
+                try {
+                    _isLoading.value = false
+                    if (response.isSuccessful && response.body() != null) {
+                        _uploadResponse.value = response.body()
+                        _toastText.value = Event(response.body()?.message.toString())
+                    } else {
                         val jsonObject = response.errorBody()?.string()?.let { JSONObject(it) }
                         val error = jsonObject?.getBoolean("error")
                         val message = jsonObject?.getString("message")
@@ -162,26 +214,27 @@ class StoryRepository private constructor(
                             "${response.message()} ${response.code()}, $message"
                         )
                         Log.e(
-                            TAG,
-                            "onFailedUpload: ${response.message()}, Code = ${response.code()}, Error = $error, Message = $message"
-                        )
-                    } catch (e: JSONException) {
-                        _toastText.value = Event(
-                            "${response.message()} ${response.code()}, ${e.message}"
-                        )
-                        Log.e(
-                            TAG, "onFailedUploadJSON: ${response.message()}, Message = ${e.message}"
+                            "uploadStory",
+                            "onResponse: ${response.message()}, ${response.code()} $message"
                         )
                     }
+                } catch (e: JSONException) {
+                    _toastText.value = Event(e.message.toString())
+                    Log.e("JSONException", "onFailure: ${e.message.toString()}")
+                } catch (e: UnknownHostException) {
+                    _toastText.value = Event("No Internet Connection")
+                    Log.e("UnknownHostException", "onFailure: ${e.message.toString()}")
+                } catch (e: Exception) {
+                    _toastText.value = Event(e.message.toString())
+                    Log.e("Exception", "onFailure: ${e.message.toString()}")
                 }
             }
 
             override fun onFailure(call: Call<AddStoryResponse>, t: Throwable) {
                 _isLoading.value = false
                 _toastText.value = Event(t.message.toString())
-                Log.e("onFailure", t.message.toString())
+                Log.e("uploadStory", "onFailure: ${t.message.toString()}")
             }
-
         })
     }
 
@@ -202,8 +255,6 @@ class StoryRepository private constructor(
     }
 
     companion object {
-        private const val TAG = "StoryRepository"
-
         @Volatile
         private var instance: StoryRepository? = null
         fun getInstance(

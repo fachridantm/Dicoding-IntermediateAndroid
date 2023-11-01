@@ -7,13 +7,13 @@ import kotlinx.parcelize.Parcelize
 data class StoriesResponse(
 
 	@field:SerializedName("listStory")
-	val listStory: List<ListStoryItem>,
+	val listStory: List<ListStoryItem>? = emptyList(),
 
 	@field:SerializedName("error")
-	val error: Boolean,
+	val error: Boolean? = true,
 
 	@field:SerializedName("message")
-	val message: String
+	val message: String? = null
 )
 
 @Parcelize
